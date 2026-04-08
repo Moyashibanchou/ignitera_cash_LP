@@ -1,0 +1,76 @@
+# =============================================================================
+# テスト環境用設定ファイル
+# =============================================================================
+# @ActiveProfiles("test") が付いたテストクラスで自動適用されます。
+# 実際の SMTP サーバー・Gemini API には接続せず、
+# Spring コンテキストのロードのみを検証します。
+# =============================================================================
+
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ignitera-backend-test
+
+  # ---------------------------------------------------------------------------
+  # メール自動構成を無効化
+  # テスト時は SMTP 接続を行わない。
+  # JavaMailSenderAutoConfiguration を除外することで
+  # 実際の Gmail サーバーへの接続試行を防ぐ。
+  # ---------------------------------------------------------------------------
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration
+      - org.springframework.boot.autoconfigure.mail.MailSenderValidatorAutoConfiguration
+
+  # ---------------------------------------------------------------------------
+  # メールスタブ設定
+  # autoconfigure.exclude で無効化されているが、
+  # @Value 注入エラーを防ぐためにダミー値を定義しておく。
+  # ---------------------------------------------------------------------------
+  mail:
+    host: localhost
+    port: 3025
+    username: test@ignitera-test.local
+    password: test-stub-password
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: false
+          starttls:
+            enable: false
+            required: false
+        debug: false
+
+# =============================================================================
+# Google AI (Gemini) 設定 — テスト用スタブ値
+# =============================================================================
+google:
+  ai:
+    api-key: TEST_GEMINI_API_KEY_STUB
+    api-url: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent
+
+# =============================================================================
+# アプリケーション独自設定 — テスト用スタブ値
+# =============================================================================
+app:
+  mail:
+    from-address: test-from@ignitera-test.local
+    from-name: IGNITERA Test System
+    to-address: test-to@ignitera-test.local
+
+  cors:
+    allowed-origins:
+      - http://localhost:3000
+
+# =============================================================================
+# ログ設定（テスト時は不要なログを抑制）
+# =============================================================================
+logging:
+  level:
+    com.ignitera.backend: DEBUG
+    org.springframework.web: WARN
+    org.springframework.mail: WARN
+    org.springframework.boot.autoconfigure: WARN

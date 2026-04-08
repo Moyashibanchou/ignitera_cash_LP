@@ -1,0 +1,62 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ignitera-backend
+
+  # ===========================================================================
+  # Gmail SMTP 設定
+  # ===========================================================================
+  # password は .env ファイルの GMAIL_APP_PASSWORD から自動注入されます。
+  # 通常の Gmail パスワードではなく「アプリ パスワード（16桁）」を使用してください。
+  # ===========================================================================
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ignitera777@gmail.com
+    password: yyvgvoyvuxbtowwc
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+        debug: false
+
+# =============================================================================
+# Google AI (Gemini) 設定
+# =============================================================================
+# api-key は .env ファイルの GEMINI_API_KEY から自動注入されます。
+# =============================================================================
+google:
+  ai:
+    api-key: AIzaSyCR0OOy4KRuxnaQdL9Bv2j4kZBEpGSSMaw
+    api-url: https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent
+
+# =============================================================================
+# アプリケーション独自設定
+# =============================================================================
+app:
+  mail:
+    from-address: ignitera777@gmail.com
+    from-name: IGNITERA Lead Detection System
+    to-address: ignitera777@gmail.com
+
+  cors:
+    allowed-origins:
+      - http://localhost:3000
+
+# =============================================================================
+# ログ設定
+# =============================================================================
+logging:
+  level:
+    com.ignitera.backend: DEBUG
+    org.springframework.web: INFO
+    org.springframework.mail: INFO
